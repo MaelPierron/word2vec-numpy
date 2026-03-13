@@ -19,3 +19,16 @@ class Word2Vec:
         loss = -np.log(score_pos) - np.sum(np.log(scores_neg))
         
         return loss, v_center, u_context, u_negatives, score_pos, scores_neg
+
+    def backward(self, center_idx, context_idx, negative_indices, 
+        v_center, u_context, u_negatives, score_pos, scores_neg, lr=0.01):
+    
+        # Gradients
+        grad_v = (score_pos - 1) * u_context - np.sum((1 - scores_neg)[:, None] * u_negatives, axis=0)
+        grad_u_pos = (score_pos - 1) * v_center
+        grad_u_neg = -(1 - scores_neg)[:, None] * v_center
+        
+        # Updates
+        self.W_center[center_idx] -= lr * grad_v
+        self.W_context[context_idx] -= lr * grad_u_pos
+        self.W_context[negative_indices] -= lr * grad_u_neg
