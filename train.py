@@ -40,6 +40,8 @@ def train(model, pairs, vocab_size, epochs=5, lr=0.0005):
                 total_loss = 0
         
         print(f"Epoch {epoch+1} complete! Time: {time.time() - start_time:.0f}s")
+        np.save(f"data/embeddings_epoch{epoch+1}.npy", model.W_center)
+        print(f"Embeddings saved for epoch {epoch+1}!")
 
 if __name__ == "__main__":
     with open("data/shakespeare.txt", "r", encoding="utf-8") as f:
