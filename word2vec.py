@@ -6,7 +6,7 @@ class Word2Vec:
         self.W_context = np.random.randn(vocab_size, embedding_dim) * 0.01
 
     def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+        return np.where(x >= 0, 1 / (1 + np.exp(-np.clip(x, -500, 500))),np.exp(np.clip(x, -500, 500)) / (1 + np.exp(np.clip(x, -500, 500))))
 
     def forward(self, center_idx, context_idx, negative_indices):
         v_center = self.W_center[center_idx]
@@ -20,15 +20,20 @@ class Word2Vec:
         
         return loss, v_center, u_context, u_negatives, score_pos, scores_neg
 
-    def backward(self, center_idx, context_idx, negative_indices, 
+    def backward(self, center_idx, context_idx, negative_indices,
         v_center, u_context, u_negatives, score_pos, scores_neg, lr=0.01):
     
         # Gradients
         grad_v = (score_pos - 1) * u_context - np.sum((1 - scores_neg)[:, None] * u_negatives, axis=0)
         grad_u_pos = (score_pos - 1) * v_center
         grad_u_neg = -(1 - scores_neg)[:, None] * v_center
-        
-        # Updates
-        self.W_center[center_idx] -= lr * grad_v
-        self.W_context[context_idx] -= lr * grad_u_pos
-        self.W_context[negative_indices] -= lr * grad_u_neg
+
+        # Gradient clipping
+        grad_v = np.clip(grad_v, -2, 2)
+        grad_u_pos = np.clip(grad_u_pos, -2, 2)
+        grad_u_neg = np.clip(grad_u_neg, -2, 2)
+
+        # Updates avec weight decay
+        self.W_center[center_idx] -= lr * grad_v + 1e-5 * self.W_center[center_idx]
+        self.W_context[context_idx] -= lr * grad_u_pos + 1e-5 * self.W_context[context_idx]
+        self.W_context[negative_indices] -= lr * grad_u_neg + 1e-5 * self.W_context[negative_indices]

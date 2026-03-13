@@ -1,4 +1,5 @@
 import re
+import numpy as np
 from collections import Counter
 
 def preprocess(text):
@@ -14,16 +15,25 @@ def build_vocab(tokens, min_count=5):
     idx2word = {i: w for i, w in enumerate(vocab)}
     return word2idx, idx2word
 
-def generate_training_pairs(tokens, word2idx, window_size=2):
+def generate_training_pairs(tokens, word2idx, window_size=2, subsample_threshold=1e-3):
     pairs = []
-    indexed = [word2idx[w] for w in tokens if w in word2idx]
+    counts = Counter(tokens)
+    total = len(tokens)
     
-    for i, center in enumerate(indexed):
+    # Subsampling probability
+    keep_prob = {w: min(1.0, (subsample_threshold / (counts[w] / total)) ** 0.5)
+                 for w in word2idx}
+    
+    indexed = [(word2idx[w], keep_prob[w]) for w in tokens if w in word2idx]
+    
+    for i, (center, prob) in enumerate(indexed):
+        if np.random.random() > prob:
+            continue
         start = max(0, i - window_size)
         end = min(len(indexed), i + window_size + 1)
         for j in range(start, end):
             if i != j:
-                pairs.append((center, indexed[j]))
+                pairs.append((center, indexed[j][0]))
     return pairs
 
 if __name__ == "__main__":
