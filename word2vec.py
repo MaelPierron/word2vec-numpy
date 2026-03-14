@@ -24,14 +24,14 @@ class Word2Vec:
         v_center, u_context, u_negatives, score_pos, scores_neg, lr=0.01):
     
         # Gradients
-        grad_v = (score_pos - 1) * u_context - np.sum((1 - scores_neg)[:, None] * u_negatives, axis=0)
-        grad_u_pos = (score_pos - 1) * v_center
-        grad_u_neg = -(1 - scores_neg)[:, None] * v_center
+        grad_v = (1 - score_pos) * u_context + np.sum((1 - scores_neg)[:, None] * u_negatives, axis=0)
+        grad_u_pos = (1 - score_pos) * v_center
+        grad_u_neg = (1 - scores_neg)[:, None] * v_center
 
         # Gradient clipping
-        grad_v = np.clip(grad_v, -2, 2)
-        grad_u_pos = np.clip(grad_u_pos, -2, 2)
-        grad_u_neg = np.clip(grad_u_neg, -2, 2)
+        grad_v = np.clip(grad_v, -1, 1)
+        grad_u_pos = np.clip(grad_u_pos, -1, 1)
+        grad_u_neg = np.clip(grad_u_neg, -1, 1)
 
         # Updates avec weight decay
         self.W_center[center_idx] -= lr * grad_v + 1e-5 * self.W_center[center_idx]

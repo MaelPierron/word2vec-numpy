@@ -20,17 +20,13 @@ def train(model, pairs, vocab_size, epochs=5, lr=0.0005):
         offset = epoch * len(pairs)
         
         for i, (center_idx, context_idx) in enumerate(pairs):
-            # Learning rate decay global
-            current_lr = lr * (1 - (offset + i) / n)
-            current_lr = max(current_lr, lr * 0.0001)
-            
             negative_indices = get_negative_samples(vocab_size, context_idx)
             
             loss, v_center, u_context, u_negatives, score_pos, scores_neg = model.forward(
                 center_idx, context_idx, negative_indices)
             
             model.backward(center_idx, context_idx, negative_indices,
-                         v_center, u_context, u_negatives, score_pos, scores_neg, current_lr)
+                        v_center, u_context, u_negatives, score_pos, scores_neg, lr)
             
             total_loss += loss
             
@@ -55,7 +51,7 @@ if __name__ == "__main__":
     vocab_size = len(word2idx)
     model = Word2Vec(vocab_size, embedding_dim=100)
 
-    train(model, pairs, vocab_size, epochs=5, lr=0.0005)
+    train(model, pairs, vocab_size, epochs=20, lr=0.001)
 
     np.save("data/embeddings.npy", model.W_center)
     print("Embeddings saved!")

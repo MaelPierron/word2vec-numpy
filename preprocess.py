@@ -8,9 +8,19 @@ def preprocess(text):
     tokens = text.split()
     return tokens
 
+STOPWORDS = {
+    "the", "a", "an", "of", "to", "and", "in", "is", "it", "that",
+    "this", "was", "he", "she", "his", "her", "my", "your", "our",
+    "their", "we", "you", "i", "me", "him", "us", "them", "be", "are",
+    "have", "has", "had", "do", "did", "will", "would", "could", "should",
+    "may", "might", "shall", "with", "for", "on", "at", "by", "from",
+    "as", "or", "but", "not", "so", "if", "up", "out", "no", "what",
+    "all", "were", "they", "been", "one", "there", "when", "who", "which"
+}
+
 def build_vocab(tokens, min_count=5):
     counts = Counter(tokens)
-    vocab = [w for w, c in counts.items() if c >= min_count]
+    vocab = [w for w, c in counts.items() if c >= min_count and w not in STOPWORDS]
     word2idx = {w: i for i, w in enumerate(vocab)}
     idx2word = {i: w for i, w in enumerate(vocab)}
     return word2idx, idx2word

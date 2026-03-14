@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     tokens = preprocess(text)
     word2idx, idx2word = build_vocab(tokens)
-    embeddings = np.load("data/embeddings.npy")
+    embeddings = np.load("data/embeddings_epoch2.npy")
 
     test_words = ["king", "love", "sword", "death", "good"]
     for word in test_words:
