@@ -22,7 +22,7 @@ python evaluate.py       # Shows nearest neighbors for test words
 
 ## Training details
 
-The model trains on ~900k tokens from Shakespeare with a vocabulary of ~8800 words. Embeddings have dimension 100, window size is 2, and 5 negative samples are drawn per positive pair. Learning rate decays linearly over the full training.
+The model trains on ~900k tokens from Shakespeare with a vocabulary of ~8800 words. Embeddings have dimension 100, window size is 2, and 5 negative samples are drawn per positive pair. Learning rate decays logarithmicaly over the full training.
 
 ## Results
 

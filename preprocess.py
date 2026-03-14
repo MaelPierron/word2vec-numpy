@@ -15,7 +15,7 @@ STOPWORDS = {
     "have", "has", "had", "do", "did", "will", "would", "could", "should",
     "may", "might", "shall", "with", "for", "on", "at", "by", "from",
     "as", "or", "but", "not", "so", "if", "up", "out", "no", "what",
-    "all", "were", "they", "been", "one", "there", "when", "who", "which"
+    "all", "were", "they", "been", "one", "there", "when", "who", "which",
     "thou", "thy", "thee", "o", "hath", "doth", "art", "hast", "tis", "twas", "ere", "oft", "how"
 }
 
