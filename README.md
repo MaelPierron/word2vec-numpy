@@ -22,20 +22,21 @@ python evaluate.py       # Shows nearest neighbors for test words
 
 ## Training details
 
-The model trains on ~900k tokens from Shakespeare with a vocabulary of ~8800 words. Embeddings have dimension 100, window size is 2, and 5 negative samples are drawn per positive pair. Learning rate decays logarithmicaly over the full training.
+The model trains on ~900k tokens from Shakespeare with a vocabulary of ~8800 words. Embeddings have dimension 100, window size is 2, and 5 negative samples are drawn per positive pair. Learning rate decays logarithmically over the full training.
 
 ## Results
 
-After 4 epochs of training (best model), cosine similarity nearest neighbors:
+After 5 epochs of training (best model), cosine similarity nearest neighbors:
 
-Most similar to `king`: thou, thy, thee, love, o
-Most similar to `love`: king, now, thee, am, thy
-Most similar to `death`: sir, thy, thou, well, come
-Most similar to `good`: thee, lord, thy, sir, thou
+Most similar to 'king': now, sir, lord, come, then
+Most similar to 'love': let, now, then, ill, sir
+Most similar to 'sword': let, king, speak, say, good
+Most similar to 'death': good, ill, let, come, sir
+Most similar to 'good': sir, ill, lord, am, well
 
-Results reflect the Shakespearean vocabulary — archaic pronouns (thee, thy, thou) are very 
-frequent and dominate nearest neighbors. Meaningful associations are still visible: 
-king and love (a recurring theme in Shakespeare), good and lord/sir, death and thou/thy.
+Results reflect the Shakespearean vocabulary — common discourse words (now, come, then, let) 
+appear frequently across all contexts. Meaningful associations are still visible: 
+king-lord/sir (royal context), sword-king/speak (dramatic context), good-lord/well, death-ill (antonyms).
 
 ## Limitations
 
