@@ -23,3 +23,26 @@ python evaluate.py       # Shows nearest neighbors for test words
 ## Training details
 
 The model trains on ~900k tokens from Shakespeare with a vocabulary of ~8800 words. Embeddings have dimension 100, window size is 2, and 5 negative samples are drawn per positive pair. Learning rate decays linearly over the full training.
+
+## Results
+
+After 4 epochs of training (best model), cosine similarity nearest neighbors:
+
+Most similar to `king`: thou, thy, thee, love, o
+Most similar to `love`: king, now, thee, am, thy
+Most similar to `death`: sir, thy, thou, well, come
+Most similar to `good`: thee, lord, thy, sir, thou
+
+Results reflect the Shakespearean vocabulary — archaic pronouns (thee, thy, thou) are very 
+frequent and dominate nearest neighbors. Meaningful associations are still visible: 
+king and love (a recurring theme in Shakespeare), good and lord/sir, death and thou/thy.
+
+## Limitations
+
+- Training is slow due to the pair-by-pair SGD implementation in pure Python. A batched 
+  implementation would be significantly faster.
+- The model is sensitive to the learning rate — too high causes divergence, too low causes 
+  no learning. A more robust optimizer (e.g. Adam) would help.
+- The Shakespeare dataset introduces archaic pronouns (thee, thy, thou) that dominate the 
+  vector space. A more modern dataset would give cleaner semantic results.
+- Only W_center embeddings are saved. Averaging W_center and W_context could improve quality.

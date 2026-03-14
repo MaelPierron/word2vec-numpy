@@ -16,6 +16,7 @@ STOPWORDS = {
     "may", "might", "shall", "with", "for", "on", "at", "by", "from",
     "as", "or", "but", "not", "so", "if", "up", "out", "no", "what",
     "all", "were", "they", "been", "one", "there", "when", "who", "which"
+    "thou", "thy", "thee", "o", "hath", "doth", "art", "hast", "tis", "twas", "ere", "oft", "how"
 }
 
 def build_vocab(tokens, min_count=5):

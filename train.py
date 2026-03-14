@@ -51,7 +51,7 @@ if __name__ == "__main__":
     vocab_size = len(word2idx)
     model = Word2Vec(vocab_size, embedding_dim=100)
 
-    train(model, pairs, vocab_size, epochs=20, lr=0.001)
+    train(model, pairs, vocab_size, epochs=5, lr=0.001)
 
     np.save("data/embeddings.npy", model.W_center)
     print("Embeddings saved!")
