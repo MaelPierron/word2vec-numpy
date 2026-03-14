@@ -16,7 +16,7 @@ def train(model, pairs, vocab_size, epochs=20, lr=0.001):
         total_loss = 0
         np.random.shuffle(pairs)
         start_time = time.time()
-        epoch_lr = lr * (0.5 ** epoch)  # divise par 2 à chaque epoch
+        epoch_lr = lr / (1 + np.log(epoch + 1))
         epoch_lr = max(epoch_lr, 1e-6)  # minimum
         
         for i, (center_idx, context_idx) in enumerate(pairs):
